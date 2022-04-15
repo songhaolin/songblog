@@ -1,0 +1,91 @@
+************************************************************************************************
+jquery为页面上的radio单选框赋值，使其能根据传入的值正确的显示
+$(":radio[name='userFrozen'][value='"+userFrozen+"']").prop("checked","checked");
+其中userFrozen是页面上radio属性对应的id和name，value是传入的值
+具体使用参看：userList.ftl 用户修改页面的是否冻结单选框展示
+************************************************************************************************
+//获取选中的radio单选框对应的值,其中userFrozen为页面radio对应的id值
+let userFrozen  =$("input[name='userFrozen']:checked").val();//获取选中的radio单选框对应的值
+具体使用参看：userList.ftl 用户修改页面的是否冻结单选框展示
+************************************************************************************************
+分页功能，可以直接使用，包含第一页，上一页，下一页，最后一页，跳转页功能
+<!--加入上下页组件,此为手写的一个上下页功能-->
+    <div class="panel">
+        <div class="panel-body" style="padding: 0;">
+            <div class="col-sm-12" style="padding: 0;text-align: center">
+                <ul class="pager" style="margin-top: 10px;margin-bottom: 10px">
+                    <!--添加最前页按钮-->
+                    <li class="previous" onclick="getNewData(1)">
+                        <a href="javascript:void(0)"><i class="icon icon-backward"></i> </a>
+                    </li>
+                    <!--处理上一页的功能-->
+                    <#if userPage.pageNumber lte 1>
+                        <li class="previous.disabled">
+                            <a href="javascript:void(0)"><i class="icon icon-chevron-left"></i></a>
+                        </li>
+                    <#else>
+                        <li class="previous" onclick="getNewData('${userPage.pageNumber-1}')">
+                            <a href="javascript:void(0)"><i class="icon icon-chevron-left"></i></a>
+                        </li>
+                    </#if>
+                    <!--处理当前页和总页展示-->
+                    <li>
+                        <a href="javascript:void(0)" class="btn">${userPage.pageNumber}
+                            页/共${userPage.totalPage}页
+                        </a>
+                    </li>
+                    <!--处理下一页功能-->
+                    <#if userPage.pageNumber gte userPage.totalPage>
+                        <li class="next disabled">
+                            <a href="javascript:void(0)"><i class="icon icon-chevron-right"></i></a>
+                        </li>
+                    <#else >
+                        <li class="next" onclick="getNewData('${userPage.pageNumber+1}')">
+                            <a href="javascript:void(0)"><i class="icon icon-chevron-right"></i></a>
+                        </li>
+                    </#if>
+                    <!--展示最后一页-->
+                    <li class="next" onclick="getNewData('${userPage.totalPage}')">
+                        <a href="javascript:void(0)"><i class="icon icon-forward"></i> </a>
+                    </li>
+                    <!--添加跳转页输入框，只允许输入数字-->
+                    <li class="next">
+                        <a href="javascript:void(0)">
+                            <input type="number" id="renderPageNumber" maxlength="5"
+                                   style="width:50px;height: 20px;" oninput="value=value.replace(/[^\d]/g,'')">
+                        </a>
+                    </li>
+                    <li class="next">
+                        <a href="javascript:void(0)" onclick="renderPage()"
+                           style="padding-left: 2px;padding-right: 2px;">
+                            跳转
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+配合JavaScript方法使用
+function getNewData(pageNumber) {
+        if (!checkNotNull(pageNumber)) {
+            pageNumber = 1;
+        }
+        window.location.href = "/songblog/user/list?pageNumber=" + pageNumber + "<#if (userName?? && userName?length>0)>&userName=${userName}</#if>";
+    }
+
+    function renderPage() {
+        let renderPageNumber = $("#renderPageNumber").val();
+        if (!checkNotNull(renderPageNumber)) {
+            new $.zui.Messager('请输入跳转的页码', {
+                type: 'warning' // 定义颜色主题
+            }).show();
+            return;
+        }
+        let totalPage = '${userPage.totalPage}';
+        if (parseInt(renderPageNumber) > parseInt(totalPage)) {
+            renderPageNumber = totalPage;
+        }
+        getNewData(renderPageNumber);
+    }
+******************************************************************************************************************
