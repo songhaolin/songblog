@@ -2,6 +2,9 @@ package com.songblog.service;
 
 import com.songblog.entity.ArticleType;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.songblog.vo.ArticleTypeVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IArticleTypeService extends IService<ArticleType> {
 
+    /**
+     * @Description: 文章类型列表，包含文章数
+     * @Date: 2022/4/18
+
+     **/
+    List<ArticleTypeVo> articleTypeList();
 }

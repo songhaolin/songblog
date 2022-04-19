@@ -9,5 +9,10 @@ function zuiMsg(msg){
     new $.zui.Messager(msg, {
         type: 'warning' // 定义颜色主题
     }).show();
-    return;
+}
+
+function zuiSuccMsg(msg){
+    new $.zui.Messager(msg, {
+        type: 'success' // 定义颜色主题
+    }).show();
 }

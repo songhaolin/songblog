@@ -10,16 +10,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.songblog.dto.article.ArticleTagDto;
+import com.songblog.dto.article.ArticleTypeDto;
 import com.songblog.dto.user.UserDto;
 import com.songblog.dto.user.UserLisePageDto;
-import com.songblog.entity.Article;
-import com.songblog.entity.User;
-import com.songblog.service.IArticleService;
-import com.songblog.service.IArticleTagService;
-import com.songblog.service.IArticleTypeService;
-import com.songblog.service.IUserService;
+import com.songblog.entity.*;
+import com.songblog.service.*;
 import com.songblog.utils.CommonPage;
 import com.songblog.utils.CommonResult;
+import com.songblog.vo.ArticleTypeVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.sql.Wrapper;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,6 +48,8 @@ public class AdminController {
     private IArticleTagService articleTagService;
     @Autowired
     private IArticleService articleService;
+    @Autowired
+    private IArticleTagListService articleTagListService;
     @Autowired
     private IUserService userService;
     /**
@@ -144,5 +146,109 @@ public class AdminController {
         }
         return CommonResult.failed("更新失败");
 
+    }
+
+    /**
+     * @Description: 获取文章类型列表，包含文章数
+     * @Date: 2022/4/18
+
+     **/
+    @GetMapping("/article/type/list")
+    public String articleTypeList(Model model){
+        List<ArticleTypeVo> articleTypeVoList = articleTypeService.articleTypeList();
+        model.addAttribute("articleTypeVoList",articleTypeVoList);
+        return "/admin/articleTypeList";
+    }
+    /**
+     * @Description: 管理-更新文章类型
+     * @Date: 2022/4/18
+     * @Param articleTypeDto:
+     **/
+    @PostMapping("/article/type/addOrUpdate")
+    @ResponseBody
+    public CommonResult articleTypeUpdate(@Valid ArticleTypeDto articleTypeDto){
+        ArticleType articleType = new ArticleType();
+        BeanUtils.copyProperties(articleTypeDto,articleType);
+        //前端传来的ID不为空则是更新
+        if (StrUtil.isNotBlank(articleTypeDto.getArticleTypeId())){
+            if (articleTypeService.updateById(articleType)){
+                return CommonResult.success("更新成功！");
+            }else {
+                return CommonResult.failed("更新失败");
+            }
+        }
+        //前端传来的id为空则是添加
+        articleType.setArticleTypeAddTime(new Date());
+        if (articleTypeService.save(articleType)){
+            return CommonResult.success("添加成功！");
+        }
+        return CommonResult.failed("添加失败");
+    }
+    /**
+     * @Description: 管理-文章类型删除
+     * @Date: 2022/4/18
+     * @Param articleTypeId:
+     **/
+    @PostMapping("/article/type/del")
+    @ResponseBody
+    public CommonResult articleTypeDel(String articleTypeId){
+        //如果该文章类型下存在文章，则不许删除
+        if(articleService.count(Wrappers.<Article>lambdaQuery().eq(Article::getArticleTypeId,articleTypeId))>0){
+            return CommonResult.failed("该类型存在已发布文章，不允许删除。");
+        }
+        if (articleTypeService.removeById(articleTypeId)){
+            return CommonResult.success("删除成功！");
+        }
+        return CommonResult.failed("删除失败！");
+    }
+
+    /**
+     * @Description: 管理-文章标签列表
+     * @Date: 2022/4/19
+     * @Param model:
+     **/
+    @GetMapping("/article/tag/list")
+    public String articleTagList(Model model){
+        List<ArticleTag> articleTagList = articleTagService.list(Wrappers.<ArticleTag>lambdaQuery().orderByDesc(ArticleTag::getArticleTagAddTime));
+        model.addAttribute("articleTagList",articleTagList);
+        return "/admin/articleTagList";
+    }
+    /**
+     * @Description: 管理-添加或者修改文章标签
+     * @Date: 2022/4/19
+     * @Param articleTagDto:
+     **/
+    @PostMapping("/article/tag/addOrUpdate")
+    @ResponseBody
+    public CommonResult articleTagAddOrUpdate(@Valid ArticleTagDto articleTagDto){
+        ArticleTag articleTag = new ArticleTag();
+        BeanUtils.copyProperties(articleTagDto,articleTag);
+        if (StrUtil.isNotBlank(articleTagDto.getArticleTagId())){
+            if (articleTagService.updateById(articleTag)){
+                return CommonResult.success("更新成功");
+            }
+            return CommonResult.failed("更新失败！");
+        }
+        articleTag.setArticleTagAddTime(new Date());
+        if (articleTagService.save(articleTag)){
+            return CommonResult.success("添加成功！");
+        }
+        return CommonResult.failed("添加失败！");
+    }
+    /**
+     * @Description: 管理-删除文章标签
+     * @Date: 2022/4/19
+     * @Param articleTagId:
+     **/
+    @PostMapping("/article/tag/del")
+    @ResponseBody
+    public CommonResult articleTagDel(String articleTagId){
+        if(articleTagListService.count(Wrappers.<ArticleTagList>lambdaQuery().eq(ArticleTagList::getArticleTagId,articleTagId))>0){
+            return CommonResult.failed("当前文章标签下存在已发布的文章，不允许删除！");
+        }
+        if (articleTagService.removeById(articleTagId)){
+            return CommonResult.success("删除成功！");
+        }
+        return CommonResult.failed("删除失败！");
     }
 }

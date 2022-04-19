@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<#include "../import/top.ftl">
+<#include "../import/adminTop.ftl">
 <div class="panel" xmlns="http://www.w3.org/1999/html">
     <div class="panel-body">
         <!--form-horizontal类表示该form是一个表单，可参看zui”表单“ action规定该表单要提交的目标路径 method表示提交的方式-->
@@ -206,7 +206,7 @@
         },
         function (data){
             if (data.code==200){
-                alert(data.message);
+                zuiSuccMsg(data.message);
                 location.reload();
                 return;
             }
@@ -247,7 +247,7 @@
                 },
                 function (data) {
                     if (data.code = 200) {
-                        alert(data.message);
+                        zuiSuccMsg(data.message);
                         location.reload();//此语句为刷新当前页面
                         return;
                     }

@@ -34,6 +34,11 @@ public class Article implements Serializable {
      */
     @TableField("user_id")
     private String userId;
+    /**
+     * 关联文章id
+     */
+    @TableField("article_type_id")
+    private String articleTypeId;
 
     /**
      * 文章标题

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<#include "import/top.ftl">
+<#include "import/adminTop.ftl">
 <html lang="en">
 <head>
     <meta charset="UTF-8">

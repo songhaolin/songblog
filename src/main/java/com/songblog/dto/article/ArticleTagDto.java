@@ -1,14 +1,15 @@
-package com.songblog.entity;
+package com.songblog.dto.article;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
-import java.util.Date;
-
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -21,27 +22,23 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class ArticleTag implements Serializable {
+public class ArticleTagDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 文章标签id
      */
-    @TableId("article_tag_id")
     private String articleTagId;
 
     /**
      * 标签名称
      */
-    @TableField("article_tag_name")
+    @NotBlank(message = "文章标签名称不能为空")
     private String articleTagName;
 
     /**
      * 添加时间
      */
-    @TableField("article_tag_add_time")
     private Date articleTagAddTime;
-
-
 }

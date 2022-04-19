@@ -1,4 +1,4 @@
-<#include "../import/top.ftl">
+<#include "../import/adminTop.ftl">
 <div class="panel col-xs-12"><!-- panel用来创建一个白板，col-xs-尺寸，用来调节白板框的大小，可以参看zui白板和光栅的组件-->
     <div class="panel-body"><!--panel-body给创建的白板增加内容，一个白板中可以有其他白板-->
         <div class="col-xs-6"><!-- 单独使用col-xs-尺寸，可以使相邻白板不紧贴着-->
