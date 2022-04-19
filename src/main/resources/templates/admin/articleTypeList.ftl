@@ -4,7 +4,7 @@
 <div class="panel">
     <div class="panel-body">
 <#--        <button onclick="addOrUpdateUserPage()" type="button" class="btn btn-mini"><i class="icon icon-success"></i>添加文章标签</button>-->
-        <button onclick="addOrUpdateUserPage()" class="btn btn-success " type="button">添加文章标签</button>
+        <button onclick="addOrUpdateUserPage()" class="btn btn-success " type="button">添加文章类型</button>
     </div>
 </div>
 <!--判断返回的数据是否为空且list的size属性是否大于0，满足条件则进入-->
