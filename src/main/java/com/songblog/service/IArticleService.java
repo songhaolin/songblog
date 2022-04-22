@@ -1,7 +1,10 @@
 package com.songblog.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.songblog.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.songblog.vo.ArticleVo;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IArticleService extends IService<Article> {
 
+    IPage<ArticleVo> articleList(IPage<ArticleVo> articlePage, String articleTitle);
 }

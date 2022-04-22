@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.songblog.dto.article.ArticleDto;
 import com.songblog.dto.article.ArticleTagDto;
 import com.songblog.dto.article.ArticleTypeDto;
 import com.songblog.dto.user.UserDto;
@@ -19,6 +20,7 @@ import com.songblog.service.*;
 import com.songblog.utils.CommonPage;
 import com.songblog.utils.CommonResult;
 import com.songblog.vo.ArticleTypeVo;
+import com.songblog.vo.ArticleVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -250,5 +252,32 @@ public class AdminController {
             return CommonResult.success("删除成功！");
         }
         return CommonResult.failed("删除失败！");
+    }
+
+    /**
+     * @Description: 管理-文章列表
+     * @Date: 2022/4/22
+
+     **/
+    @GetMapping("/article/list")
+    public String articleList(@Valid ArticleDto articleDto, Model model){
+        IPage<ArticleVo> articlePage = new Page<>(articleDto.getPageNumber(),articleDto.getPageSize());
+        IPage<ArticleVo> articleVoIPage = articleService.articleList(articlePage,articleDto.getArticleTitle());
+        model.addAttribute("articleTitle",articleDto.getArticleTitle());
+        model.addAttribute("articleVoIPage",CommonPage.restPage(articleVoIPage));
+        return "/admin/articleList";
+    }
+    /**
+     * @Description: 管理-文章删除
+     * @Date: 2022/4/22
+     * @Param articleId:
+     **/
+    @PostMapping("/article/del")
+    @ResponseBody
+    public CommonResult articleDel(String articleId){
+        if (articleService.removeById(articleId)){
+            return CommonResult.success("删除成功");
+        }
+        return CommonResult.failed("删除失败");
     }
 }

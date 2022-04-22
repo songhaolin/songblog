@@ -89,3 +89,19 @@ function getNewData(pageNumber) {
         getNewData(renderPageNumber);
     }
 ******************************************************************************************************************
+简单的搜索框写法
+<form class="form-horizontal" action="/songblog/article/list" method="get">
+    <div class="form-group">
+        <label for="articleTitle" class="col-sm-1">文章标题</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control " value="${articleTitle!}" id="articleTitle" name="articleTitle"
+                   placeholder="文章标题">
+        </div>
+        <div class="col-sm-1"><!--class="btn btn-success" 是将当前1个单位的组件变成成功样式的按钮-->
+            <button type="submit" class="btn btn-success"><i class="icon icon-search"></i>搜索</button>
+        </div>
+        <div class="col-sm-1"><!--a表示这是一个可以点击的链接，点击直接跳转到对应的后端接口-->
+            <a href="/songblog/article/list" class="btn btn-success"><i class="icon icon-search"></i>全部</a>
+        </div>
+    </div>
+</form>

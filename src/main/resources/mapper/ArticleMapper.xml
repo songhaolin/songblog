@@ -2,4 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.songblog.mapper.ArticleMapper">
 
+    <select id="articleList" resultType="com.songblog.vo.ArticleVo">
+        SELECT
+            art.article_id,
+            art.article_add_time,
+            art.article_collection_number,
+            art.article_good_number,
+            art.article_look_number,
+            art.article_title,
+            art.article_type_id,
+            art.user_id,
+            arty.article_type_name,
+            u.user_name
+        FROM
+            article art
+                LEFT JOIN article_type arty ON art.article_type_id = arty.article_type_id
+                LEFT JOIN USER u ON art.user_id = u.user_id
+        <where>
+            <if test="articleTitle !=null and articleTitle != ''">
+                and art.article_title like concat ('%',#{articleTitle},'%')
+            </if>
+        </where>
+        ORDER BY
+            art.article_add_time DESC
+    </select>
+
 </mapper>

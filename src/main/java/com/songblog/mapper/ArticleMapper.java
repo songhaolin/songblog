@@ -1,7 +1,11 @@
 package com.songblog.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.songblog.entity.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.songblog.vo.ArticleVo;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ArticleMapper extends BaseMapper<Article> {
 
+    IPage<ArticleVo> articleList(IPage<ArticleVo> articlePage,@Param("articleTitle")  String articleTitle);
 }

@@ -1,0 +1,12 @@
+1.编写articleMapper.xml文件时，不熟悉where的用法，导致sql查询出错
+ <where>
+        <if test="articleTitle !=null and articleTitle != ''">
+            and art.article_title like concat ('%',#{articleTitle},'%')
+        </if>
+</where>
+***************************************************************************************
+2.遇到zui的图标失效的时候，可以ping一下引用的zui的路径（目前是top.ftl中引用的），看是否正常联通，正常的话就清一下浏览器缓存
+<#--    从zui官网的下载与使用页面获取，获取免费cdn，用来渲染前端页面-->
+    <link rel="stylesheet" href="//cdn.bootcdn.net/ajax/libs/zui/1.10.0/css/zui.min.css">
+    <script src="//cdn.bootcdn.net/ajax/libs/zui/1.10.0/lib/jquery/jquery.js"></script>
+    <script src="//cdn.bootcdn.net/ajax/libs/zui/1.10.0/js/zui.min.js"></script>
